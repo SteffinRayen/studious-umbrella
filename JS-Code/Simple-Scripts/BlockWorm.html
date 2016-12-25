@@ -1,0 +1,154 @@
+<html>
+<head>
+<script type="text/javascript">
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+// <![CDATA[
+var colours=new Array("#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"); /* select colours to fade from background colour to worm colour */
+var border="#000000"; /* colour of border */
+var speed=100; /* speed of animation, lower is faster */
+var worm=20; /* length of worm */
+var size=50; /* size of blocks */
+
+var swide, shigh;
+var blox=new Array();
+var bloy=new Array();
+var bloc=new Array();
+var blok=new Array();
+var blot=new Array();
+var dx, dy;
+var x, y;
+var c=0;
+var pete=speed*worm/colours.length;
+var boddie;
+
+if (typeof('addRVLoadEvent')!='function') function addRVLoadEvent(funky) {
+  var oldonload=window.onload;
+  if (typeof(oldonload)!='function') window.onload=funky;
+  else window.onload=function() {
+    if (oldonload) oldonload();
+    funky();
+  }
+}
+
+addRVLoadEvent(blocky_the_worm);
+
+function blocky_the_worm() { if (document.getElementById) {
+  var i, d, s;
+  boddie=document.createElement("div");
+  boddie.style.position="fixed";
+  boddie.style.top="0px";
+  boddie.style.left="0px";
+  boddie.style.width="1px";
+  boddie.style.height="1px";
+  boddie.style.overflow="visible";
+  boddie.style.backgroundColor="transparent";
+  document.body.appendChild(boddie);
+  size+=4;
+  set_width();
+  x=4+size*Math.floor(swide/(size*2));
+  y=4+size*Math.floor(shigh/(size*2));
+  for (i=0; i<worm; i++) {
+    d=document.createElement("div");
+    s=d.style;
+    s.width=(size-4)+"px";
+    s.height=(size-4)+"px";
+    s.overflow="hidden";
+    s.position="absolute";
+    s.border="1px solid "+border;
+    blok[i]=s;
+    boddie.appendChild(d);
+    bloc[i]=-1;
+    blox[i]=x;
+    bloy[i]=y;
+    blot[i]=false;
+  }
+  set_dir(true);
+  setInterval('mainblock()', speed);
+}}
+
+function set_dir(hardth) {
+  if (hardth) {
+    dx=size*(Math.floor(3*Math.random())-1);
+    dy=size*(Math.floor(3*Math.random())-1);
+  }
+  else {
+    if (dx && dy) {
+      if (Math.random()<0.5) dx=0;
+      else dy=0;
+    }
+    else if (!dy) dy=(Math.random()<0.5)?size:-size;
+    else dx=(Math.random()<0.5)?size:-size;
+  }
+}
+
+function mainblock() {
+  var t=false;
+  if (x>swide || y>shigh) {
+	  if (x>swide) dx=-size;
+	  if (y>shigh) dy=-size;
+  }
+  else while (x+dx>swide || x+dx<0 || y+dy>shigh || y+dy<0 || Math.random()<.1 || (t=in_array(x+dx, y+dy, c))) set_dir(t);
+  blok[c].left=(blox[c]=(x+=dx))+"px";
+  blok[c].top=(bloy[c]=(y+=dy))+"px";
+  bloc[c]=colours.length;
+  if (blot[c]) clearTimeout(blot[c]);
+  subblock(c);
+  c=++c%worm;
+}
+
+function in_array(xtest, ytest, pos) {
+  var i, j;
+  for (i=pos-3; i<pos; i++) {
+    j=(i<0)?i+worm:i;
+    if (blox[j]==xtest && bloy[j]==ytest) return (true); 
+  }
+  return (false);
+}
+
+function subblock(r) {
+  if (--bloc[r]>-1) {
+    blok[r].backgroundColor=getRandomColor();
+    blot[r]=setTimeout("subblock("+r+")", pete);
+  }
+  else blot[r]=false;
+}
+
+window.onresize=set_width;
+function set_width() {
+  var sw_min=999999;
+  var sh_min=999999;
+  if (document.documentElement && document.documentElement.clientWidth) {
+    if (document.documentElement.clientWidth>0) sw_min=document.documentElement.clientWidth;
+    if (document.documentElement.clientHeight>0) sh_min=document.documentElement.clientHeight;
+  }
+  if (typeof(self.innerWidth)!="undefined" && self.innerWidth) {
+    if (self.innerWidth>0 && self.innerWidth<sw_min) sw_min=self.innerWidth;
+    if (self.innerHeight>0 && self.innerHeight<sh_min) sh_min=self.innerHeight;
+  }
+  if (document.body.clientWidth) {
+    if (document.body.clientWidth>0 && document.body.clientWidth<sw_min) sw_min=document.body.clientWidth;
+    if (document.body.clientHeight>0 && document.body.clientHeight<sh_min) sh_min=document.body.clientHeight;
+  }
+  if (sw_min==999999 || sh_min==999999) {
+    sw_min=800;
+    sh_min=600;
+  }
+  swide=sw_min-size;
+  shigh=sh_min-size;
+}
+// ]]>
+</script>
+</head>
+<body>
+	<h1>
+		Block Snake with random colour generator
+	</h1>
+</body>
+</html>

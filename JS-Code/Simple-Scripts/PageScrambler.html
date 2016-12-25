@@ -1,0 +1,88 @@
+<html>
+<head>
+<script type="text/javascript">
+// <![CDATA[
+var delay=5; /*        loaded */
+var colour="#f00"; /*        swapped */
+
+var elems=new Array();
+var chars=new Array();
+var elmax=chmax=0;
+var nexco="transparent";
+
+function addLoadEvent(funky) {
+   oldonload=window.onload;
+   (typeof(oldonload)!='function') window.onload=funky;
+   window.onload=function() {
+     (oldonload) oldonload();
+    funky();
+  }
+}
+
+addLoadEvent(scramble);
+
+function scramble() {  (document.getElementById) {
+   i, j, txt, parent, span, words;
+  getAllText(document.body);
+   (i=0; i<elmax; i++) {
+    txt=elems[i].nodeValue;
+    parent=elems[i].parentNode;
+    words=elems[i].nodeValue.split(" ");
+     (j=0; j<words.length; j++) {
+       (words[j].match(/^\w{2,}$/)) {
+        span=document.createElement("span");
+        span.appendChild(document.createTextNode(words[j]));
+        parent.insertBefore(span, elems[i]);
+        chars[chmax++]=span;
+      }
+       parent.insertBefore(document.createTextNode(words[j]), elems[i]);
+       (j!=words.length-1) parent.insertBefore(document.createTextNode(" "), elems[i]);
+    }
+    parent.removeChild(elems[i]);
+  }
+  setTimeout("scrumble()", delay*1000);
+}}
+
+function scrumble() { 
+   i, l1, r, l2;
+   (i=0; i<chmax; i++) {
+    l1=chars[i].firstChild.nodeValue.length;
+	do { 
+      r=i+Math.floor(Math.random()*(chmax-i));
+	  l2=chars[r].firstChild.nodeValue.length;
+	}
+	while (i<chmax-256 && l1!=l2);
+    setTimeout("swap("+i+", "+r+")", 40*i);
+  }
+}
+
+function swap(i, j) {
+   k=chars[i].firstChild.nodeValue;
+   l=chars[j].firstChild.nodeValue;
+   (i) chars[i].style.backgroundColor=nexco;
+   (i!=chmax-1) {
+	  nexco=chars[i+1].style.backgroundColor;
+	  chars[i+1].style.backgroundColor=colour;
+  }
+  chars[i].firstChild.nodeValue=l;
+  chars[j].firstChild.nodeValue=k;
+}
+
+function getAllText(el) {
+   (el.nodeType==3 && !el.nodeValue.match(/^\s*$/)) elems[elmax++]=el;
+   (el.childNodes.length)  (var i=0; i<el.childNodes.length; i++) getAllText(el.childNodes[i]);
+}
+// ]]>
+</script>
+</head>
+<body>
+	<h1>
+		Page Scrambler...
+	</h1>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut cursus augue at est eleifend, sit amet auctor nibh accumsan. Sed maximus nibh eu diam ultrices, quis placerat metus elementum. Donec vitae lorem odio. Nullam dictum ultricies dolor, vitae placerat nisl congue elementum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas felis mi, tempus eget massa nec, placerat malesuada diam. Donec laoreet odio vel efficitur egestas. Pellentesque luctus justo pellentesque, semper orci in, tempor mauris. Duis egestas nisl nec ante consequat sodales. Aenean vel facilisis ligula, et porttitor quam. Suspendisse sagittis, libero in accumsan rhoncus, sem odio tempor nulla, in placerat tellus ante vel est. Fusce dignissim odio ut nulla pulvinar lobortis. Duis nec ipsum quis felis auctor dictum.</p>
+
+	<p>Mauris id orci ac magna hendrerit vestibulum. Nulla bibendum placerat sapien vitae sollicitudin. Morbi iaculis arcu eget iaculis vestibulum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in dictum arcu. Etiam neque mi, posuere ac ante auctor, consequat vulputate turpis. Aenean laoreet libero quis tellus volutpat euismod. Praesent dignissim leo non nunc blandit dignissim. Vivamus ut fermentum turpis. Nam ac arcu varius, pharetra justo et, tincidunt tortor. Proin pulvinar non augue tincidunt vulputate. Integer tincidunt turpis ac semper efficitur. Curabitur metus justo, porttitor maximus cursus lobortis, blandit volutpat purus. Cras pretium eros libero, non consectetur libero scelerisque nec. Nullam non nunc vitae tellus vehicula convallis et vitae dolor. Morbi volutpat semper magna vitae egestas.</p>
+
+	<p>Nulla aliquam purus ut est consectetur fermentum. Ut ultricies elit vel dolor laoreet tincidunt. Maecenas scelerisque nisi felis, eu luctus elit feugiat id. Fusce ac egestas dui, in finibus nisl. In pretium sem lorem, eget congue augue auctor eu. Integer orci felis, blandit et facilisis et, facilisis faucibus ipsum. Nulla vitae orci leo. Fusce imperdiet feugiat libero, id vulputate neque luctus eu. Quisque vitae suscipit ipsum, eget porttitor elit. Morbi nibh purus, viverra id tristique et, venenatis ac nisi. Nam at tellus massa.</p>
+</body>
+</html>

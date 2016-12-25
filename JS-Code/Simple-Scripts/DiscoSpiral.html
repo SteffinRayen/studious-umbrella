@@ -1,0 +1,86 @@
+<html>
+<head>
+<script type="text/javascript">
+// <![CDATA[
+var colsel=new Array('#edf', '#dbf', '#c9f', '#b7f', '#a5f', '#93f'); /* colours for animation */
+var speed=100; /* speed of animation, lower is faster */
+
+
+window.onload=whizzy;
+var div;
+var ring=new Array();
+var swide=screen.width;
+var shigh=screen.height;
+var count=0;
+var roun=0;
+var nour=0;
+function whizzy() {
+	var i, dvs;
+	div=document.createElement('div');
+	dvs=div.style;
+	dvs.position='fixed';
+	dvs.left='50%';
+	dvs.top='50%';
+	dvs.width='1px';
+	dvs.height='1px';
+	dvs.overflow='visible';
+	dvs.zIndex='-1';
+	i=document.body.style.backgroundColor;
+	if (document.body.parentNode) {
+		if (i) document.body.parentNode.style.backgroundColor=i;
+		document.body.style.backgroundColor="transparent";
+	}
+	document.body.insertBefore(div, document.body.firstChild);
+	for (i=0; i<30; i++) ring['col'+i]=new Array();
+	add_blobs();
+	zoomer();
+}
+
+function add_blobs() {
+    var f, h, i, j, k, w;
+	for (i=50; i<swide*1.5;) {
+		f=Math.floor(10+140*(i/swide)); /* from 10 to 150 */
+		ring['row'+count]=new Array();
+		for (j=0; j<30; j++) {
+		  h=-f/8+i/2*Math.cos(Math.PI*j/15);
+		  w=f/5+i/2*Math.sin(Math.PI*j/15);
+		  if (h-f/2>shigh/2 || h+f/2<-shigh/2 || w-f/2>swide/2 || w+f/2<-swide/2) continue;
+		  k=document.createElement('div');
+		  dvs=k.style;
+		  dvs.position='absolute';
+		  dvs.left=w-f/2+'px';
+		  dvs.top=h-f/2+'px';
+		  dvs.color=colsel[colsel.length-1];
+		  k.appendChild(document.createTextNode(String.fromCharCode(9679)));
+		  k.style.fontSize=f+'px';
+		  ring['row'+count][j]=k;
+		  ring['col'+j][count]=k;
+		  div.appendChild(k);
+		}
+		count++;
+		i+=f*2;
+	}
+	nour=count;
+}
+
+function zoomer() {
+   for (var i=0; i<30; i++) {
+     var tc=Math.abs(i-nour+roun)%colsel.length;
+     if (ring['col'+i][roun]) ring['col'+i][roun].style.color=colsel[tc];
+   }
+   if (++roun==count) {
+     roun=0;
+	 nour++;
+	 setTimeout('zoomer()', speed);
+   }
+   else zoomer();
+}
+// ]]>
+</script>
+</head>
+<body>
+	<h1>
+		Disco Spiral
+	</h1>
+</body>
+</html>

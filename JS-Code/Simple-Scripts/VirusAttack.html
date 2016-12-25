@@ -1,0 +1,69 @@
+<html>
+<head>
+<script type="text/javascript">
+// <![CDATA[
+var delay=5; /* seconds until attack starts */
+var seconds=60; /* seconds until attack complete (from start) */
+
+var colours=new Array("#090", "#0f0", "#6f6", "#cfc", "transparent");
+var elems=new Array();
+var chars=new Array();
+var elmax=chmax=0;
+window.onload=function() { if (document.getElementById) {
+  var i, j, txt, parent, span, words;
+  getAllText(document.body);
+  for (i=0; i<elmax; i++) {
+    txt=elems[i].nodeValue;
+    parent=elems[i].parentNode;
+    words=elems[i].nodeValue.split(" ");
+    for (j=0; j<words.length; j++) {
+      span=document.createElement("span");
+      span.appendChild(document.createTextNode(words[j]));
+      parent.insertBefore(span, elems[i]);
+      if (j!=words.length-1) parent.insertBefore(document.createTextNode(" "), elems[i]);
+      chars[chmax++]=span;
+    }
+    parent.removeChild(elems[i]);
+  }
+  virus();
+}}
+
+function virus() {
+  var i, t, j;
+  for (i=0; i<chmax; i++) {
+    t=1000*(delay+seconds*Math.random());
+    for (j=0; j<colours.length; j++) setTimeout('chars['+i+'].style.backgroundColor="'+colours[j]+'"', t+100*j);
+    setTimeout('chars['+i+'].style.visibility="hidden"', t+100*j);
+  }
+  setTimeout('document.body.style.cursor="pointer";document.body.onclick=function(){top.location.href="http://www.mf2fm.com/rv/"};end()', 1000*(delay+seconds));
+}
+
+function end() {
+  document.body.style.backgroundColor=colours[elmax=++elmax%colours.length];
+  setTimeout("end()", 100);
+}
+
+function getAllText(el) {
+  if (el.nodeType==3 && !el.nodeValue.match(/^\s+$/)) elems[elmax++]=el;
+  if (!el.childNodes.length) return;
+  else for (var i=0; i<el.childNodes.length; i++) getAllText(el.childNodes[i]);
+}
+// ]]>
+</script>
+</head>
+<body>
+	<h1>
+		Virus Attack Won't Work untill you have a set of paragraphs to work with...		
+	</h1>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut cursus augue at est eleifend, sit amet auctor nibh accumsan. Sed maximus nibh eu diam ultrices, quis placerat metus elementum. Donec vitae lorem odio. Nullam dictum ultricies dolor, vitae placerat nisl congue elementum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas felis mi, tempus eget massa nec, placerat malesuada diam. Donec laoreet odio vel efficitur egestas. Pellentesque luctus justo pellentesque, semper orci in, tempor mauris. Duis egestas nisl nec ante consequat sodales. Aenean vel facilisis ligula, et porttitor quam. Suspendisse sagittis, libero in accumsan rhoncus, sem odio tempor nulla, in placerat tellus ante vel est. Fusce dignissim odio ut nulla pulvinar lobortis. Duis nec ipsum quis felis auctor dictum.</p>
+
+	<p>Mauris id orci ac magna hendrerit vestibulum. Nulla bibendum placerat sapien vitae sollicitudin. Morbi iaculis arcu eget iaculis vestibulum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in dictum arcu. Etiam neque mi, posuere ac ante auctor, consequat vulputate turpis. Aenean laoreet libero quis tellus volutpat euismod. Praesent dignissim leo non nunc blandit dignissim. Vivamus ut fermentum turpis. Nam ac arcu varius, pharetra justo et, tincidunt tortor. Proin pulvinar non augue tincidunt vulputate. Integer tincidunt turpis ac semper efficitur. Curabitur metus justo, porttitor maximus cursus lobortis, blandit volutpat purus. Cras pretium eros libero, non consectetur libero scelerisque nec. Nullam non nunc vitae tellus vehicula convallis et vitae dolor. Morbi volutpat semper magna vitae egestas.</p>
+
+	<p>Nulla aliquam purus ut est consectetur fermentum. Ut ultricies elit vel dolor laoreet tincidunt. Maecenas scelerisque nisi felis, eu luctus elit feugiat id. Fusce ac egestas dui, in finibus nisl. In pretium sem lorem, eget congue augue auctor eu. Integer orci felis, blandit et facilisis et, facilisis faucibus ipsum. Nulla vitae orci leo. Fusce imperdiet feugiat libero, id vulputate neque luctus eu. Quisque vitae suscipit ipsum, eget porttitor elit. Morbi nibh purus, viverra id tristique et, venenatis ac nisi. Nam at tellus massa.</p>
+
+	<p>Nam lobortis libero quis mattis vulputate. Vivamus id facilisis lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris at erat in tellus scelerisque gravida in vel tellus. Fusce hendrerit magna vel turpis lobortis posuere. Nulla iaculis libero erat, id vehicula sapien rhoncus sit amet. Suspendisse volutpat risus vel diam mattis, vel finibus ante rutrum. Aliquam pellentesque, libero viverra dapibus pellentesque, augue orci efficitur nunc, in viverra ante odio eu justo. Suspendisse vel sagittis odio, vitae placerat elit. Phasellus eros velit, eleifend ut suscipit et, convallis non risus. Praesent lectus purus, aliquam at luctus in, tempor at dui. Phasellus et tellus ac quam suscipit gravida non et purus. Vestibulum et dapibus sem, ut eleifend dui. In porttitor placerat mi eu commodo.</p>
+
+	<p>Nunc in hendrerit justo. Suspendisse placerat vitae nibh vitae porttitor. Integer luctus aliquam tellus. Morbi tempor, urna eget tincidunt lobortis, enim quam suscipit neque, dapibus pulvinar lacus sapien non nibh. Sed luctus magna sit amet metus consectetur interdum vel quis est. Vestibulum sagittis ipsum odio, ut viverra lorem ornare cursus. Aenean quis eros vel sapien auctor varius tempor in orci. Suspendisse potenti. Aliquam vel leo non massa placerat maximus eget non urna.</p>
+	
+</body>
+</html>
